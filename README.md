@@ -10,7 +10,7 @@
 1. Edit the user_mdt.sql for the charges
 2. Copy the files from the en_version and replace the other
 
-If anyones wants to see what it looks like click these links below
+## Pictures
 1. https://cdn.discordapp.com/attachments/1048675733658144808/1088142581260627978/image.png
 2. https://cdn.discordapp.com/attachments/1048675733658144808/1088142949742813233/image.png
 3. https://cdn.discordapp.com/attachments/1048675733658144808/1088143016071548948/image.png
