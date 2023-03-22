@@ -7,8 +7,7 @@
 
 ## English Version
 
-1. Edit the user_mdt.sql for the charges
-2. Copy the files from the en_version and replace the other
+1. Copy the files from the en_version and replace the other
 
 ## Pictures
 1. https://cdn.discordapp.com/attachments/1048675733658144808/1088142581260627978/image.png
