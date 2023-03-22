@@ -15,7 +15,7 @@ Config.Jobs = {"police","realestate","marshal","sheriff"}
 Config.UseOffice = true
 Config.Open = { 
 	['key'] = 0xD9D0E1C0, -- SPACE
-	['text'] = "~e~[SPACE] ~q~to open Archiv",
+	['text'] = "~e~[SPACE] ~q~to open Archive",
 	} 
 Config.Office = {
     [1] = {
