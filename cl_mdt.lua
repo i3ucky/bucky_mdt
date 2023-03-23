@@ -58,7 +58,7 @@ function AnimationJ(ped, dict, name)
 end
 
 RegisterNetEvent("bucky_mdt:toggleVisibilty")
-AddEventHandler("bucky_mdt:toggleVisibilty", function(reports, warrants, officer, job, grade)
+AddEventHandler("bucky_mdt:toggleVisibilty", function(reports, warrants, officer, job, grade, note)
     local playerPed = PlayerPedId()
     if not isVisible then
         SetCurrentPedWeapon(playerPed, GetHashKey('WEAPON_UNARMED'), true) -- unarm player
@@ -92,6 +92,7 @@ AddEventHandler("bucky_mdt:toggleVisibilty", function(reports, warrants, officer
     end
     if #warrants == 0 then warrants = false end
     if #reports == 0 then reports = false end
+    if #note == 0 then note = false end
     SendNUIMessage({
         type = "recentReportsAndWarrantsLoaded",
         reports = reports,
@@ -99,6 +100,7 @@ AddEventHandler("bucky_mdt:toggleVisibilty", function(reports, warrants, officer
         officer = officer,
         department = job,
         rank = grade,
+        note = note,
     })
 
     ToggleGUI()
@@ -146,6 +148,12 @@ RegisterNUICallback("submitNewReport", function(data, cb)
     cb('ok')
 end)
 
+RegisterNUICallback("submitNote", function(data, cb)
+    TriggerServerEvent("bucky_mdt:submitNote", data)
+
+    cb('ok')
+end)
+
 RegisterNUICallback("performReportSearch", function(data, cb)
     TriggerServerEvent("bucky_mdt:performReportSearch", data.query)
 
@@ -160,6 +168,12 @@ end)
 
 RegisterNUICallback("deleteReport", function(data, cb)
     TriggerServerEvent("bucky_mdt:deleteReport", data.id)
+
+    cb('ok')
+end)
+
+RegisterNUICallback("deleteNote", function(data, cb)
+    TriggerServerEvent("bucky_mdt:deleteNote", data.id)
 
     cb('ok')
 end)
@@ -195,6 +209,12 @@ end)
 
 RegisterNUICallback("getReport", function(data, cb)
     TriggerServerEvent("bucky_mdt:getReportDetailsById", data.id)
+
+    cb('ok')
+end)
+
+RegisterNUICallback("getNotes", function(data, cb)
+    TriggerServerEvent("bucky_mdt:getNoteDetailsById", data.id)
 
     cb('ok')
 end)
@@ -266,6 +286,15 @@ AddEventHandler("bucky_mdt:returnReportDetails", function(data)
 
     SendNUIMessage({
         type = "returnedReportDetails",
+        details = data
+    })
+end)
+
+RegisterNetEvent("bucky_mdt:returnNoteDetails")
+AddEventHandler("bucky_mdt:returnNoteDetails", function(data)
+
+    SendNUIMessage({
+        type = "returnedNoteDetails",
         details = data
     })
 end)

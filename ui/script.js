@@ -20,7 +20,8 @@ const mdtApp = new Vue({
         homepage: {
             button_press: 0,
             reports: false,
-            warrants: false
+            warrants: false,
+            note: false
         },
         recent_searches: {
             person: [],
@@ -56,7 +57,26 @@ const mdtApp = new Vue({
             recommended_fine: 0,
             recommended_sentence: 0,
         },
-
+        note_new: {
+            title: "",
+            note: "",
+        },
+        note_results: {
+            query: "",
+            results: false
+        },
+        note_selected: {
+            id: null,
+            date: null,
+            title: null,
+            note: null,
+            author: null,
+        },    
+        note_search: "",
+        note_edit: {
+            enable: false,
+            data: {}
+        },    
         offender_search: "",
         offender_results: {
             query: "",
@@ -122,7 +142,10 @@ const mdtApp = new Vue({
                 $("#warrants").addClass("nav-active");
             } else if (page == "Submit Report") {
                 $("#submit-report").addClass("nav-active");
+            } else if (page == "Submit Note") {
+                $("#submit-note").addClass("nav-active");
             }
+            
         },
         closeMDT() {
             $.post('http://bucky_mdt/close', JSON.stringify({}));
@@ -256,6 +279,18 @@ const mdtApp = new Vue({
                 return;   
             }
         },
+        SubmitNote() {
+            if (this.note_new.title && this.note_new.note) {
+                $.post('http://bucky_mdt/submitNote', JSON.stringify({
+                    title: this.note_new.title,
+                    note: this.note_new.note,
+                }));
+
+                this.note_new.title = "";
+                this.note_new.note = "";
+                return;   
+            }
+        },
         OpenOffenderDetailsById(charidentifier) {
             $.post('http://bucky_mdt/getOffender', JSON.stringify({
                 char_id: charidentifier
@@ -272,6 +307,17 @@ const mdtApp = new Vue({
                 this.report_edit.enable = true;
                 this.report_edit.data.title = this.report_selected.title;
                 this.report_edit.data.incident = this.report_selected.incident;
+            }
+            return;
+        },
+        ToggleNoteEdit() {
+            if (this.note_edit.enable) {
+                this.note_edit.enable = false;
+                this.note_edit.data = {}
+            } else {
+                this.note_edit.enable = true;
+                this.note_edit.data.title = this.note_selected.title;
+                this.note_edit.data.incident = this.note_selected.incident;
             }
             return;
         },
@@ -296,6 +342,25 @@ const mdtApp = new Vue({
             this.report_search = "";
             return;
         },
+        DeleteSelectedNote() {
+            $.post('http://bucky_mdt/deleteNote', JSON.stringify({
+                id: this.note_selected.id,
+            }));
+            this.changePage("Home");
+            this.note_selected = {
+                id: null,
+                date: null,
+                title: null,
+                note: null,
+                author: null
+            };
+            this.note_results = {
+                query: "",
+                results: false
+            };
+            this.note_search = "";
+            return;
+        },
         SaveReportEditChanges() {
             $.post('http://bucky_mdt/saveReportChanges', JSON.stringify({
                 id: this.report_selected.id,
@@ -306,6 +371,18 @@ const mdtApp = new Vue({
             this.report_selected.title = this.report_edit.data.title;
             this.report_selected.incident = this.report_edit.data.incident;
             this.ToggleReportEdit();
+            return;
+        },
+        SaveNoteEditChanges() {
+            $.post('http://bucky_mdt/saveNoteChanges', JSON.stringify({
+                id: this.note_selected.id,
+                title: this.note_edit.data.title,
+                incident: this.note_edit.data.incident
+            }));
+
+            this.note_selected.title = this.note_edit.data.title;
+            this.note_selected.incident = this.note_edit.data.incident;
+            this.ToggleNoteEdit();
             return;
         },
         WarrantReportSearch() {
@@ -458,10 +535,12 @@ document.onreadystatechange = () => {
             } else if (event.data.type == "returnedReportDetails") {
                 mdtApp.changePage("Search Reports");
                 mdtApp.report_selected = event.data.details;
-
                 mdtApp.modal = null;
+            } else if (event.data.type == "returnedNoteDetails") {
+                mdtApp.note_selected = event.data.note;
             } else if (event.data.type == "recentReportsAndWarrantsLoaded") {
                 mdtApp.homepage.reports = event.data.reports;
+                mdtApp.homepage.note = event.data.note;
                 mdtApp.homepage.warrants = event.data.warrants;
                 mdtApp.officer.name = event.data.officer;
 				mdtApp.officer.rank = event.data.rank + ' ';
@@ -498,6 +577,7 @@ function ClearActiveNavItems() {
     $("#search-offenders").removeClass("nav-active");
     $("#warrants").removeClass("nav-active");
     $("#submit-report").removeClass("nav-active");
+    $("#submit-note").removeClass("nav-active");
 }
 
 function WarrantTimer() {

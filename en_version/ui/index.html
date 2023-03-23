@@ -20,20 +20,18 @@
             <p id="title_top" style="font-family: 'Girassol', sans-serif; font-style: sans-serif; font-size: 5vh; text-align: center; color: #000000;">United States Archive</p>
             <div class="wrapper">
             <div class="sidebar">
-    
                 <img src="badges/police.png">
                 <h2></h2>
-    
                 <ul>
                         <li v-on:click="changePage('Home')" id="home">Home</li>
                         <li v-on:click="changePage('Search Offenders')" id="search-offenders" >Search Citizen</li>
                         <li v-on:click="changePage('Search Reports')" id="search-reports" >Search Reports</li>
                         <li v-on:click="changePage('Submit Report')" id="submit-report" >Create Report</li>
                         <li v-on:click="changePage('Warrants')" id="warrants" >Warrants</li>
+                        <li v-on:click="changePage('Submit Note')" id="submit-note" >Create note</li>
                         <li v-on:click="closeMDT()" id="close" >Close</li>
                 </ul>
             </div>
-    
             <main id="main">
                 <div v-if="page == 'Home'">
     
@@ -70,7 +68,16 @@
                             <br />
                         </span>
                     </div>
-
+                    <div class="recent-notes">
+                    <h3>LATEST NOTES</h3>
+                    <br />
+                    <h4 v-if="homepage.note == false"> ... </h4>
+                    <span v-if="homepage.note" v-for="note in homepage.note">
+                        <h4 style="font-size: 12px; margin-bottom: 3px;"> {{ note.date }} - ID: {{ note.id }} </h4>
+                        <button type="button" v-on:click="note_selected = note; changePage('Note Details');" style="margin-bottom: 10px; width: 100%; padding: unset;"> {{ note.title }} </button>
+                        <br />
+                    </span>
+                    </div>
                 </div>
 
                 <div v-if="page == 'Search Reports'">
@@ -191,6 +198,23 @@
                     </div>
                 </div>
 
+                    <div v-if="page == 'Submit Note'">
+                    
+                        <h2 class="page-title">CREATE NOTE</h2>
+                        
+                        <div class="submit-note">
+                            <el-form @keyup.enter.native>
+                                <h3>TITLE</h3>
+                                <input v-on:keyup.enter="SubmitNote()" v-model="note_new.title" style="font-size: 1.5vh;" type="text" placeholder="Enter note title" class="note-input" required>
+                                <h3>NOTE</h3>
+                                <textarea v-model="note_new.note" :class="getClass('textarea')" rows="6" cols="55" placeholder="Note" onkeypress='this.style.height = "";this.style.height = this.scrollHeight + "px"' required>
+                                </textarea>
+                                <br />
+                                <button v-if="note_new.note && note_new.title" v-on:click="SubmitNote()" type="button" style="margin-top: 10px">SAVE NOTE</button>
+                            </el-form>
+
+                        </div>
+                    </div>
                 <div v-if="page == 'Search Offenders'">
 
                         <h2 class="page-title">SEARCH CITIZENS</h2>
@@ -318,6 +342,27 @@
                                 <button type="button" v-if="report_edit.data.incident && report_edit.data.title" v-on:click="SaveReportEditChanges();" >SAVE</button>
                                 <button type="button" v-on:click="ToggleReportEdit();" >CANCEL</button>
                         </template>
+                    </div>
+                </div>
+
+                <div v-if="page == 'Note Details'">
+                    <h2 class="page-title">NOTES</h2>
+                    <br />
+                    <div class="note-details">
+                        <h3>DATE</h3>
+                        <h4 v-if="note_selected.date"> {{ note_selected.date }} </h4>
+                        <h4 v-else-if="note_selected.date == null"> ... </h4>
+                        <template v-if="note_edit.enable == false">
+                            <h3>NOTE #{{note_selected.id}}</h3>
+                            <h4 v-if="note_selected.title"> {{ note_selected.title }} </h4>
+                            <h4 v-else-if="note_selected.title == null"> ... </h4>
+                        </template>
+                        <h3>CREATED BY</h3>
+                        <h4 v-if="note_selected.author"> {{ note_selected.author }} </h4>
+                        <h4 v-else-if="note_selected.author == null"> ... </h4>
+                        <br />
+                        <button type="button" v-on:click="changePage('Home')" id="search-reports" >BACK</button>
+                        <button v-if="note_edit.enable == false" type="button" v-on:click="DeleteSelectedNote()" >DELETE</button> 
                     </div>
                 </div>
 

@@ -15,18 +15,22 @@ RegisterCommand(""..Config.Command.."", function(source, args)
         for k,v in pairs(Config.Jobs) do
             if job == v then
                 job_access = true
-				exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_reports` ORDER BY `id` DESC LIMIT 3) sub ORDER BY `id` DESC", {}, function(reports)
+				exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_reports` ORDER BY `id` DESC LIMIT 8) sub ORDER BY `id` DESC", {}, function(reports)
 					for r = 1, #reports do
 						reports[r].charges = json.decode(reports[r].charges)
 					end
-					exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_warrants` ORDER BY `id` DESC LIMIT 3) sub ORDER BY `id` DESC", {}, function(warrants)
+					exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_warrants` ORDER BY `id` DESC LIMIT 8) sub ORDER BY `id` DESC", {}, function(warrants)
 						for w = 1, #warrants do
 							warrants[w].charges = json.decode(warrants[w].charges)
 						end
-		
-						TriggerClientEvent('bucky_mdt:toggleVisibilty', _source, reports, warrants, officername, job, jobgrade)
+						exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_notes` ORDER BY `id` DESC LIMIT 8) sub ORDER BY `id` DESC", {}, function(note)
+							for n = 1, #note do
+								note[n].charges = json.decode(note[n].charges)
+							end
+						TriggerClientEvent('bucky_mdt:toggleVisibilty', _source, reports, warrants, officername, job, jobgrade, note)
 					end)
 				end)
+			end)
             end
         end
         if job_access == false then
@@ -39,7 +43,7 @@ AddEventHandler("bucky_mdt:getOffensesAndOfficer", function()
     local _source = source
 	local User = Vorpcore.getUser(_source)
     local Character = User.getUsedCharacter
-	local officername = Character.firstname.. ' ' ..Character.lastname
+	local officername = (Character.firstname.. " " ..Character.lastname)
 
 	local charges = {}
 	exports.ghmattimysql:execute('SELECT * FROM fine_types', {}, function(fines)
@@ -197,6 +201,12 @@ AddEventHandler("bucky_mdt:deleteReport", function(id)
 	TriggerClientEvent("bucky_mdt:sendNotification", source, Config.Notify['3'])
 end)
 
+RegisterServerEvent("bucky_mdt:deleteNote")
+AddEventHandler("bucky_mdt:deleteNote", function(id)
+	exports.oxmysql:execute('DELETE FROM `mdt_notes` WHERE `id` = ?', {id})
+	TriggerClientEvent("bucky_mdt:sendNotification", source, Config.Notify['9'])
+end)
+
 RegisterServerEvent("bucky_mdt:submitNewReport")
 AddEventHandler("bucky_mdt:submitNewReport", function(data)
 	local usource = source
@@ -220,6 +230,20 @@ AddEventHandler("bucky_mdt:submitNewReport", function(data)
 			end
 		end)
 	end
+end)
+
+RegisterServerEvent("bucky_mdt:submitNote")
+AddEventHandler("bucky_mdt:submitNote", function(data)
+	local usource = source
+	local User = Vorpcore.getUser(usource)
+    local Character = User.getUsedCharacter
+	local officername = (Character.firstname.. " " ..Character.lastname)
+	charges = json.encode(data.charges)
+	data.date = os.date('%m-%d-%Y %H:%M:%S', os.time())
+	exports.oxmysql:insert('INSERT INTO `mdt_notes` ( `title`, `note`, `author`, `date`) VALUES (?, ?, ?, ?)', {data.title, data.note, officername, data.date,}, function(id)
+		TriggerEvent("bucky_mdt:getNoteDetailsById", id, usource)
+		TriggerClientEvent("bucky_mdt:sendNotification", usource, Config.Notify['8'])
+	end)
 end)
 
 RegisterServerEvent("bucky_mdt:performReportSearch")
@@ -287,6 +311,20 @@ AddEventHandler("bucky_mdt:getReportDetailsById", function(query, _source)
 		else
 			TriggerClientEvent("bucky_mdt:closeModal", usource)
 			TriggerClientEvent("bucky_mdt:sendNotification", usource, Config.Notify['7'])
+		end
+	end)
+end)
+
+RegisterServerEvent("bucky_mdt:getNoteDetailsById")
+AddEventHandler("bucky_mdt:getNoteDetailsById", function(query, _source)
+	if _source then source = _source end
+	local usource = source
+	exports.ghmattimysql:execute("SELECT * FROM `mdt_notes` WHERE `id` = ?", {query}, function(result)
+		if result and result[1] then
+			TriggerClientEvent("bucky_mdt:returnNoteDetails", usource, result[1])
+		else
+			TriggerClientEvent("bucky_mdt:closeModal", usource)
+			TriggerClientEvent("bucky_mdt:sendNotification", usource, Config.Notify['8'])
 		end
 	end)
 end)

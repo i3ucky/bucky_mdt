@@ -65,6 +65,20 @@
   user-select: none;
 }
 
+.recent-notes {
+  top: 65%;
+  position: fixed;
+  float: unset;
+  left: 62%;
+  padding-right: 5%;
+  right: 10%;
+  width: 30%;
+  overflow-y: auto;
+  height: auto;
+  text-align: left;
+  user-select: none;
+}
+
 .search-reports {
   position: fixed;
   top: 30%;
@@ -92,6 +106,19 @@
 }
 
 .submit-report {
+  position:fixed; 
+  top: 25%; 
+  padding-left: 5%;
+  float: left;
+  max-width: 600px;
+  overflow-y: auto;
+  margin-left: 5%;
+  height: auto;
+  text-align: left;
+  user-select: none;
+}
+
+.submit-note {
   position:fixed; 
   top: 25%; 
   padding-left: 5%;
@@ -157,6 +184,21 @@
   user-select: none;
 }
 
+.note-details {
+  position: fixed; 
+  top: 30%;
+
+  float: unset;
+  margin: 0 auto; 
+  padding-left: 5%;
+  float: left;
+  max-width: 50%;
+  overflow-y: auto;
+  margin-left: 5%;
+  height: auto;
+  text-align: left;
+  user-select: none;
+}
 .new-warrant {
   position: fixed; 
   float: none; 

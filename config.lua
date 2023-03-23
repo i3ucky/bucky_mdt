@@ -35,4 +35,6 @@ Config.Notify = {
 	['5'] = "A new warrant has been created.", 
 	['6'] = "Warrant has been successfully deleted.",
 	['7'] = "This report cannot be found.",
+	['8'] = "Note saved.",
+	['9'] = "Note deleted.",
 	} 

@@ -55,6 +55,16 @@ CREATE TABLE IF NOT EXISTS `fine_types` (
        PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `mdt_notes` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`title` varchar(255) DEFAULT NULL,
+	`note` longtext DEFAULT NULL,
+    `author` varchar(255) DEFAULT NULL,
+    `date` varchar(255) DEFAULT NULL,
+
+	PRIMARY KEY (`id`)
+);
+
 INSERT INTO `fine_types` (`id`, `label`, `amount`, `category`, `jailtime`) VALUES
 (1, 'Murder', 25000, 0, 0),
 (2, 'Involuntary Manslaughter', 10000, 0, 120),

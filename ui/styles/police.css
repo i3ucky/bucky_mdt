@@ -188,7 +188,19 @@ font-family: 'Special Elite', cursive;
   text-align: left;
 
 }
-
+.note-input {
+  font-family: 'Special Elite', cursive;
+    border-width: 0px;
+    border: none;
+    color: #dcdcdc;
+    font-size: 12pt;
+    padding: 0px 0px 0px 0px;
+    width: 70%;
+    margin-right: 10px;
+    text-overflow: ellipsis;
+    text-align: left;
+  
+  }
 .wrapper {
   display: flex;
   position: relative;
