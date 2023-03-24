@@ -10,5 +10,7 @@ If anyones wants to see what it looks like click these links below
 ## Original Script by Unknown Ghostz#9131
 https://github.com/unknownghostz6/westerntheme-mdt
 
+## v2.1
+1. notes are now displayed correctly
 ## V2
 1. Notes implemented (Create, Delete)
