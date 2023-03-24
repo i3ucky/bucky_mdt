@@ -15,15 +15,15 @@ RegisterCommand(""..Config.Command.."", function(source, args)
         for k,v in pairs(Config.Jobs) do
             if job == v then
                 job_access = true
-				exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_reports` ORDER BY `id` DESC LIMIT 8) sub ORDER BY `id` DESC", {}, function(reports)
+				exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_reports` ORDER BY `id` DESC LIMIT 6) sub ORDER BY `id` DESC", {}, function(reports)
 					for r = 1, #reports do
 						reports[r].charges = json.decode(reports[r].charges)
 					end
-					exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_warrants` ORDER BY `id` DESC LIMIT 8) sub ORDER BY `id` DESC", {}, function(warrants)
+					exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_warrants` ORDER BY `id` DESC LIMIT 6) sub ORDER BY `id` DESC", {}, function(warrants)
 						for w = 1, #warrants do
 							warrants[w].charges = json.decode(warrants[w].charges)
 						end
-						exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_notes` ORDER BY `id` DESC LIMIT 8) sub ORDER BY `id` DESC", {}, function(note)
+						exports.ghmattimysql:execute("SELECT * FROM (SELECT * FROM `mdt_notes` ORDER BY `id` DESC LIMIT 6) sub ORDER BY `id` DESC", {}, function(note)
 							for n = 1, #note do
 								note[n].charges = json.decode(note[n].charges)
 							end
@@ -240,7 +240,7 @@ AddEventHandler("bucky_mdt:submitNote", function(data)
 	local officername = (Character.firstname.. " " ..Character.lastname)
 	charges = json.encode(data.charges)
 	data.date = os.date('%m-%d-%Y %H:%M:%S', os.time())
-	exports.oxmysql:insert('INSERT INTO `mdt_notes` ( `title`, `note`, `author`, `date`) VALUES (?, ?, ?, ?)', {data.title, data.note, officername, data.date,}, function(id)
+	exports.oxmysql:insert('INSERT INTO `mdt_notes` ( `title`, `incident`, `author`, `date`) VALUES (?, ?, ?, ?)', {data.title, data.note, officername, data.date,}, function(id)
 		TriggerEvent("bucky_mdt:getNoteDetailsById", id, usource)
 		TriggerClientEvent("bucky_mdt:sendNotification", usource, Config.Notify['8'])
 	end)

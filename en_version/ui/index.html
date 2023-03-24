@@ -361,6 +361,12 @@
                         <h4 v-if="note_selected.author"> {{ note_selected.author }} </h4>
                         <h4 v-else-if="note_selected.author == null"> ... </h4>
                         <br />
+                        <template v-if="note_edit.enable == false">
+                            <h3>DETAILS</h3>
+                            <h4 v-if="note_selected.incident" style="white-space: pre-line; white-space: pre-wrap;">{{ note_selected.incident }}</h4>
+                            <h4 v-else-if="note_selected.incident == null"> ... </h4>
+                            </template>
+                            <br />
                         <button type="button" v-on:click="changePage('Home')" id="search-reports" >BACK</button>
                         <button v-if="note_edit.enable == false" type="button" v-on:click="DeleteSelectedNote()" >DELETE</button> 
                     </div>

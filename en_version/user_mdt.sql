@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `fine_types` (
 CREATE TABLE `mdt_notes` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`title` varchar(255) DEFAULT NULL,
-	`note` longtext DEFAULT NULL,
+	`incident` longtext DEFAULT NULL,
     `author` varchar(255) DEFAULT NULL,
     `date` varchar(255) DEFAULT NULL,
 
