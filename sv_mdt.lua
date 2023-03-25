@@ -42,8 +42,8 @@ RegisterServerEvent("bucky_mdt:getOffensesAndOfficer")
 AddEventHandler("bucky_mdt:getOffensesAndOfficer", function()
     local _source = source
 	local User = Vorpcore.getUser(_source)
-    local Character = User.getUsedCharacter
-	local officername = (Character.firstname.. " " ..Character.lastname)
+    Character = User.getUsedCharacter
+	officername = (Character.firstname.. " " ..Character.lastname)
 
 	local charges = {}
 	exports.ghmattimysql:execute('SELECT * FROM fine_types', {}, function(fines)
