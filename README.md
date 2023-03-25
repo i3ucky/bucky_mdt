@@ -6,7 +6,7 @@
 4. To bring up the mdt use /mdt in chat (this can be changed in config) and itll bring up the mdt with an animation as if you were pulling out a notebook or notepad.
 
 ## Example
-![pic1](https://cdn.discordapp.com/attachments/1048675733658144808/1088143016071548948/image.png)
+![pic1](https://cdn.discordapp.com/attachments/1048675733658144808/1089147194092830781/image.png)
 
 ## Original Script by Unknown Ghostz#9131
 https://github.com/unknownghostz6/westerntheme-mdt
