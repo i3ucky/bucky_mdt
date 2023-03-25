@@ -8,7 +8,7 @@
 ## Example
 https://cdn.discordapp.com/attachments/1048675733658144808/1088143016071548948/image.png
 
-[(https://cdn.discordapp.com/attachments/1048675733658144808/1088143016071548948/image.png)](https://cdn.discordapp.com/attachments/1048675733658144808/1088143016071548948/image.png)
+[![pic1](https://cdn.discordapp.com/attachments/1048675733658144808/1088143016071548948/image.png)](https://cdn.discordapp.com/attachments/1048675733658144808/1088143016071548948/image.png)
 
 ## Original Script by Unknown Ghostz#9131
 https://github.com/unknownghostz6/westerntheme-mdt
