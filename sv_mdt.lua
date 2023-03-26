@@ -54,6 +54,9 @@ AddEventHandler("bucky_mdt:getOffensesAndOfficer", function()
 		end
 
 		TriggerClientEvent("bucky_mdt:returnOffensesAndOfficer", _source, charges, officername)
+		
+	if Character.lastname ~= nil then
+	end
 	end)
 end)
 
