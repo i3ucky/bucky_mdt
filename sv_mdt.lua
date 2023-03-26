@@ -40,24 +40,22 @@ end)
 
 RegisterServerEvent("bucky_mdt:getOffensesAndOfficer")
 AddEventHandler("bucky_mdt:getOffensesAndOfficer", function()
-    local _source = source
-	local User = Vorpcore.getUser(_source)
+    local usource = source
+	local User = Vorpcore.getUser(usource)
     Character = User.getUsedCharacter
-	officername = (Character.firstname.. " " ..Character.lastname)
-
-	local charges = {}
-	exports.ghmattimysql:execute('SELECT * FROM fine_types', {}, function(fines)
+	if lastname ~= nil then
+		officername = (Character.firstname.. " " ..Character.lastname)
+		local charges = {}
+		exports.ghmattimysql:execute('SELECT * FROM fine_types', {}, function(fines)
 		for j = 1, #fines do
 			if fines[j].category == 0 or fines[j].category == 1 or fines[j].category == 2 or fines[j].category == 3 then
 				table.insert(charges, fines[j])
 			end
-		end
-
-		TriggerClientEvent("bucky_mdt:returnOffensesAndOfficer", _source, charges, officername)
-		
-	if Character.lastname ~= nil then
+			end
+			
+		TriggerClientEvent("bucky_mdt:returnOffensesAndOfficer", usource, charges, officername)
+		end)
 	end
-	end)
 end)
 
 RegisterServerEvent("bucky_mdt:performOffenderSearch")
