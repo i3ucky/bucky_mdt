@@ -28,12 +28,13 @@ end
         end
     end)
 
-TriggerServerEvent("bucky_mdt:getOffensesAndOfficer")
+--TriggerServerEvent("bucky_mdt:getOffensesAndOfficer")
 
 RegisterNetEvent("bucky_mdt:toggleVisibilty")
 AddEventHandler("bucky_mdt:toggleVisibilty", function(reports, warrants, officer, job, grade, note)
     local playerPed = PlayerPedId()
     if not isVisible then
+        TriggerServerEvent("bucky_mdt:getOffensesAndOfficer")
         SetCurrentPedWeapon(playerPed, GetHashKey('WEAPON_UNARMED'), true) -- unarm player
         Wait(1000)
         Citizen.InvokeNative(0x524B54361229154F, PlayerPedId(), GetHashKey("world_human_write_notebook"), 9999999999,true,false, false, false)
