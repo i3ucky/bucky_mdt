@@ -186,7 +186,6 @@
 .note-details {
   position: fixed; 
   top: 30%;
-
   float: unset;
   margin: 0 auto; 
   padding-left: 5%;
@@ -194,7 +193,7 @@
   max-width: 50%;
   overflow-y: auto;
   margin-left: 5%;
-  height: auto;
+  height: 60vh;
   text-align: left;
   user-select: none;
 }

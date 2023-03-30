@@ -1,5 +1,3 @@
-var language = {}
-
 const mdtApp = new Vue({
     el: "#container",
     data: {
@@ -145,7 +143,6 @@ const mdtApp = new Vue({
             } else if (page == "Submit Note") {
                 $("#submit-note").addClass("nav-active");
             }
-            
         },
         closeMDT() {
             $.post('http://bucky_mdt/close', JSON.stringify({}));
@@ -535,6 +532,7 @@ document.onreadystatechange = () => {
             } else if (event.data.type == "returnedReportDetails") {
                 mdtApp.changePage("Search Reports");
                 mdtApp.report_selected = event.data.details;
+
                 mdtApp.modal = null;
             } else if (event.data.type == "returnedNoteDetails") {
                 mdtApp.note_selected = event.data.note;
@@ -605,4 +603,3 @@ function WarrantTimer() {
 }
 
 WarrantTimer()
-
