@@ -225,16 +225,16 @@
 
                     <div class="search-offenders">
                         <h3>NAME</h3>
-                        <h4 v-if="offender_selected.firstname"> {{ offender_selected.firstname }} {{ offender_selected.lastname }} </h4>
-                        <h4 v-else-if="offender_selected.name == null"> ... </h4>
-                        <h3 v-if="offender_selected.firstname == null || offender_selected.notes || offender_selected.haswarrant || offender_selected.bail">NOTIZEN</h3>
-                        <h4 v-if="offender_selected.notes"> {{ offender_selected.notes }} </h4>
-                        <h4 v-if="offender_selected.haswarrant" v-bind:class="getClass('important')"> {{ offender_selected.firstname}} {{offender_selected.lastname}} wird gesucht. </h4>
-                        <h4 v-if="offender_selected.bail" v-bind:class="getClass('important')"> {{ offender_selected.firstname}} {{offender_selected.lastname}} ist auf Kaution frei. </h4>
-                        <h4 v-if="offender_selected.firstname == null"> ... </h4>
-                        <h3 v-if="offender_selected.firstname == null || (offender_selected.convictions != null && Object.keys(offender_selected.convictions).length > 0)">STRAFEN</h3>
-                        <h4 v-if="offender_selected.firstname == null"> ... </h4>
-                        <span v-else-if="offender_selected.convictions" v-for="(value, name) in offender_selected.convictions">
+                        <h4 v-if="offender_selected.firstname">{{ offender_selected.firstname }} {{ offender_selected.lastname }}</h4>
+                        <h4 v-else-if="offender_selected.name == null">...</h4>
+                        <h3 v-if="offender_selected.firstname == null || offender_selected.notes || offender_selected.haswarrant || offender_selected.bail">NOTES</h3>
+                        <h4 v-if="offender_selected.notes">{{ offender_selected.notes }}</h4>
+                        <h4 v-if="offender_selected.haswarrant" v-bind:class="getClass('important')">{{ offender_selected.firstname }} {{ offender_selected.lastname }} has an active warrant.</h4>
+                        <h4 v-if="offender_selected.bail" v-bind:class="getClass('important')">{{ offender_selected.firstname }} {{ offender_selected.lastname }} is on bail.</h4>
+                        <h4 v-if="offender_selected.firstname == null">...</h4>
+                        <h3 v-if="offender_selected.convictions && Object.keys(offender_selected.convictions).length > 0">CONVICTIONS</h3>
+                        <div class="convictions-container" v-if="offender_selected.convictions && Object.keys(offender_selected.convictions).length > 0">
+                            <span v-for="(value, name) in offender_selected.convictions">
                             <h4>{{ name }} x{{ value }}</h4>
                         </span>
                         <br />
