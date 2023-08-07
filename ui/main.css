@@ -246,6 +246,12 @@
   margin: 0 auto;
 }
 
+.convictions-container {
+  max-height: 200px; /* Set the maximum height of the convictions section */
+  overflow-y: auto; /* Enable vertical scrolling when content exceeds the maximum height */
+  padding-right: 10px; /* Add some padding on the right side to prevent content from overlapping with the scrollbar */
+}
+
 /* ------------------------------------------------------------- */
 .modal {
   position: fixed; /* Stay in place */
