@@ -218,6 +218,7 @@ AddEventHandler("bucky_mdt:submitNewReport", function(data)
 	exports.oxmysql:insert('INSERT INTO `mdt_reports` (`char_id`, `title`, `incident`, `charges`, `author`, `name`, `date`) VALUES (?, ?, ?, ?, ?, ?, ?)', {data.char_id, data.title, data.incident, charges, officername, data.name, data.date,}, function(id)
 		TriggerEvent("bucky_mdt:getReportDetailsById", id, usource)
 		TriggerClientEvent("bucky_mdt:sendNotification", usource, Config.Notify['4'])
+		Vorpcore.AddWebhook(Config.webhook.ReportTitle, Config.webhook.url, "Report ID: " .. id .. "\n" .. "Officer Name: " .. officername .. "\n" .. "Offender Name: " .. data.name .. "\n" .. "Report Title: " .. data.title .. "\n" .. "Incident: " .. data.incident .. "\n" .. "Charges: " .. charges, Config.webhook.color, Config.webhook.name, Config.webhook.logo, Config.webhook.footerlogo, Config.webhook.avatar)
 	end)
 
 	for offense, count in pairs(data.charges) do
@@ -242,6 +243,7 @@ AddEventHandler("bucky_mdt:submitNote", function(data)
 	exports.oxmysql:insert('INSERT INTO `mdt_notes` ( `title`, `incident`, `author`, `date`) VALUES (?, ?, ?, ?)', {data.title, data.note, officername, data.date,}, function(id)
 		TriggerEvent("bucky_mdt:getNoteDetailsById", id, usource)
 		TriggerClientEvent("bucky_mdt:sendNotification", usource, Config.Notify['8'])
+		Vorpcore.AddWebhook(Config.webhook.NoteTitle, Config.webhook.url, "Reporter Name: " .. officername .. "\n" .. "Report Title: " .. data.title .. "\n" .. "Note Content: " .. data.note, Config.webhook.color, Config.webhook.name, Config.webhook.logo, Config.webhook.footerlogo, Config.webhook.avatar)
 	end)
 end)
 
