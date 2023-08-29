@@ -11,6 +11,19 @@ Config.Command = "mdt"
 --[[ Allowed Jobs ]]--
 Config.Jobs = {"police","realestate","marshal","sheriff"}
 
+--[[ Webhook ]]--
+Config.webhook = {
+	url = "DISCORD WEBHOOK URL",
+	NoteTitle = "New Note Created",
+	ReportTitle = "New Report Created",
+	color = nil,
+	name = "Name",
+	footerlogo = nil,
+	logo = nil,
+	avatar = nil
+}
+
+
 --[[ Offices ]]--
 Config.UseOffice = true
 Config.Open = { 
