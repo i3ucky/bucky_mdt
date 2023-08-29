@@ -225,74 +225,75 @@
                     </el-form>
                     
                     <br />
-
                     <div class="search-offenders">
                         <h3>NAME</h3>
-                        <h4 v-if="offender_selected.firstname"> {{ offender_selected.firstname }} {{ offender_selected.lastname }} </h4>
-                        <h4 v-else-if="offender_selected.name == null"> ... </h4>
-                            <h3 v-if="offender_selected.firstname == null || offender_selected.notes || offender_selected.haswarrant || offender_selected.bail">NOTES</h3>
-                        <h4 v-if="offender_selected.notes"> {{ offender_selected.notes }} </h4>
-                            <h4 v-if="offender_selected.haswarrant" v-bind:class="getClass('important')"> {{ offender_selected.firstname}} {{offender_selected.lastname}} has an active warrant. </h4>
-                            <h4 v-if="offender_selected.bail" v-bind:class="getClass('important')"> {{ offender_selected.firstname}} {{offender_selected.lastname}} is on bail. </h4>
-                        <h4 v-if="offender_selected.firstname == null"> ... </h4>
-                            <h3 v-if="offender_selected.firstname == null || (offender_selected.convictions != null && Object.keys(offender_selected.convictions).length > 0)">CONVICTIONS</h3>
-                        <h4 v-if="offender_selected.firstname == null"> ... </h4>
-                        <span v-else-if="offender_selected.convictions" v-for="(value, name) in offender_selected.convictions">
-                            <h4>{{ name }} x{{ value }}</h4>
-                        </span>
+                        <h4 v-if="offender_selected.firstname">{{ offender_selected.firstname }} {{ offender_selected.lastname }}</h4>
+                        <h4 v-else-if="offender_selected.name == null">...</h4>
+                        <h3 v-if="offender_selected.firstname == null || offender_selected.notes || offender_selected.haswarrant || offender_selected.bail">NOTES</h3>
+                        <h4 v-if="offender_selected.notes">{{ offender_selected.notes }}</h4>
+                        <h4 v-if="offender_selected.haswarrant" v-bind:class="getClass('important')">{{ offender_selected.firstname }} {{ offender_selected.lastname }} has an active warrant.</h4>
+                        <h4 v-if="offender_selected.bail" v-bind:class="getClass('important')">{{ offender_selected.firstname }} {{ offender_selected.lastname }} is on bail.</h4>
+                        <h4 v-if="offender_selected.firstname == null">...</h4>
+                    
+                        <!-- Separate condition to check for convictions -->
+                        <h3 v-if="offender_selected.convictions && Object.keys(offender_selected.convictions).length > 0">CONVICTIONS</h3>
+                        <div class="convictions-container" v-if="offender_selected.convictions && Object.keys(offender_selected.convictions).length > 0">
+                            <span v-for="(value, name) in offender_selected.convictions">
+                                <h4>{{ name }} x{{ value }}</h4>
+                            </span>
+                        </div>
                         <br />
-                            <button v-if="offender_selected.firstname" type="button" v-on:click="modal = 'edit_offender'" id="edit-offender" >EDIT PROFILE</button>
-                            <button v-if="offender_selected.firstname" type="button" v-on:click="changePage('Submit Report'); report_new.char_id = offender_selected.id; report_new.name = offender_selected.firstname + ' ' + offender_selected.lastname; report_new.focus = 'charges'" >NEW REPORT</button>
+                    
+                        <button v-if="offender_selected.firstname" type="button" v-on:click="modal = 'edit_offender'" id="edit-offender">EDIT PROFILE</button>
                     </div>
-
+                    
                     <div class="search-offenders-result">
                         <div v-if="offender_results.query" style="margin-right: 10px;">
-                                <h3>SEARCH RESULTS</h3>
-                                <h4 style="margin: 10px 1px 30px 1px;">Finding results for '{{ offender_results.query }}'...</h4>
+                            <h3>SEARCH RESULTS</h3>
+                            <h4 style="margin: 10px 1px 30px 1px;">Finding results for '{{ offender_results.query }}'...</h4>
                             <span v-if="offender_results.results" v-for="offender in offender_results.results">
-                                <button type="button" v-on:click="OpenOffenderDetails(offender.id)" style="margin-bottom: 10px; width: 100%; padding: unset;">{{ offender.firstname }} {{ offender.lastname }}</button>
+                                <button type="button" v-on:click="OpenOffenderDetailsById(offender.charidentifier)" style="margin-bottom: 10px; width: 100%; padding: unset;">{{ offender.firstname }} {{ offender.lastname }}</button>
                                 <br />
                             </span>
                         </div>
-
+                    
                         <div v-else-if="offender_results.results == false">
-                                <span v-if="offender_selected.bail" v-bind:class="getClass('img-block')">BAIL</span>
-                                <span v-if="offender_selected.haswarrant" v-bind:class="getClass('img-block')" style="top: 12%;">WARRANT</span>
+                            <span v-if="offender_selected.bail" v-bind:class="getClass('img-block')">BAIL</span>
+                            <span v-if="offender_selected.haswarrant" v-bind:class="getClass('img-block')" style="top: 12%;">WARRANT</span>
                             <img v-if="offender_selected.mugshot_url" v-bind:src="offender_selected.mugshot_url" alt="mugshot" v-bind:class="getClass('mugshot')">
                             <img v-else-if="offender_selected.mugshot_url == ''" src="mugshot.png" alt="mugshot" v-bind:class="getClass('mugshot')">
                         </div>
                     </div>
-
+                    
                     <div class="modal" v-if="modal == 'edit_offender'">
-						<div v-bind:class="getClass('modal-content')" style="width: 50%; padding: 15px; margin-top: 120px; height: auto; text-align: left;">
-							<span v-bind:class="getClass('close')" v-on:click="modal = null"><i class="fas fa-times"></i></span>
-                                <h3 style="text-align: left; margin: 0; padding: 0; margin-bottom: 15px;">EDIT DETAILS</h3>
-		                    <br />
-		                    <div style="max-height: 55%; overflow-y: auto;">
-		                        <el-form @keyup.enter.native>
-                                        <h3>NOTES</h3>
-		                            <input v-model="offender_changes.notes" class="no-select" type="text" v-bind:placeholder="offender_selected.notes">
-                                        <h3 style="margin-top: 20px">MUGSHOT URL</h3>
-		                            <input v-model="offender_changes.mugshot_url" type="text" v-bind:placeholder="offender_selected.mugshot_url">
-		                            <br />
-                                        <button v-if="offender_changes.bail == true" type="button" style="margin: 10px 0;" v-on:click="offender_changes.bail = false">ON BAIL</button>
-                                        <button v-else-if="offender_changes.bail == false" type="button" style="margin: 10px 0;" v-on:click="offender_changes.bail = true">NOT ON BAIL</button>
-		                            <br />
-		                        </el-form>
-                                    <h3>CONVICTIONS</h3>
-		                        <h4 v-if="offender_changes.convictions == null || (offender_changes.convictions && Object.keys(offender_changes.convictions).length == 0)"> ... </h4>
-		                        <span v-else-if="offender_changes.convictions" v-for="(value, name) in offender_changes.convictions">
-		                            <h4>
-		                                <span v-on:click="RemoveConviction(name)" class="remove">(-)</span> 
-		                                {{ name }} x{{ value }}
-		                            </h4>
-		                        </span>
-		                        <br />
-		                    </div>
-                                <button type="button" v-on:click="SaveOffenderChanges()" style="margin-top: 10px;">SAVE CHANGES</button>
-						</div>
+                        <div v-bind:class="getClass('modal-content')" style="width: 50%; padding: 15px; margin-top: 120px; height: auto; text-align: left;">
+                            <span v-bind:class="getClass('close')" v-on:click="modal = null"><i class="fas fa-times"></i></span>
+                            <h3 style="text-align: left; margin: 0; padding: 0; margin-bottom: 15px;">EDIT DETAILS</h3>
+                            <br />
+                            <div style="max-height: 55%; overflow-y: auto;">
+                                <el-form @keyup.enter.native>
+                                    <h3>NOTES</h3>
+                                    <input v-model="offender_changes.notes" class="no-select" type="text" v-bind:placeholder="offender_selected.notes">
+                                    <h3 style="margin-top: 20px">MUGSHOT URL</h3>
+                                    <input v-model="offender_changes.mugshot_url" type="text" v-bind:placeholder="offender_selected.mugshot_url">
+                                    <br />
+                                    <button v-if="offender_changes.bail == true" type="button" style="margin: 10px 0;" v-on:click="offender_changes.bail = false">ON BAIL</button>
+                                    <button v-else-if="offender_changes.bail == false" type="button" style="margin: 10px 0;" v-on:click="offender_changes.bail = true">NOT ON BAIL</button>
+                                    <br />
+                                </el-form>
+                                <h3>CONVICTIONS</h3>
+                                <h4 v-if="offender_changes.convictions == null || (offender_changes.convictions && Object.keys(offender_changes.convictions).length == 0)">...</h4>
+                                <span v-else-if="offender_changes.convictions" v-for="(value, name) in offender_changes.convictions">
+                                    <h4>
+                                        <span v-on:click="RemoveConviction(name)" class="remove">(-)</span>
+                                        {{ name }} x{{ value }}
+                                    </h4>
+                                </span>
+                                <br />
+                            </div>
+                            <button type="button" v-on:click="SaveOffenderChanges()" style="margin-top: 10px;">SAVE CHANGES</button>
+                        </div>
                     </div>
-                </div>
 
                 <div v-if="page == 'Report Details'">
                         <h2 class="page-title">REPORT DETAILS</h2>
